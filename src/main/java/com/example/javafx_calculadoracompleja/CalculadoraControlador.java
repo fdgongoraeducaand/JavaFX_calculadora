@@ -52,7 +52,7 @@ public class CalculadoraControlador {
                         || texto.equals("="))) {
                     txtPantalla.setText(txtPantalla.getText().equals("0") ? texto : txtPantalla.getText() + texto);
                 }
-                event.consume(); // Cancela la propagación posterior si fuera necesario
+             //   event.consume(); // Cancela la propagación posterior si fuera necesario
             }
         });
 
@@ -63,15 +63,10 @@ public class CalculadoraControlador {
         Button btn = (Button) event.getSource();
         String digito = btn.getText();
 
-        if (inicioNuevoNumero) {
-            txtPantalla.setText(digito);
-            inicioNuevoNumero = false;
+        if (txtPantalla.getText().equals("0")) {
+           txtPantalla.setText(digito);
         } else {
-            if (txtPantalla.getText().equals("0")) {
-                txtPantalla.setText(digito);
-            } else {
-                txtPantalla.setText(txtPantalla.getText() + digito);
-            }
+           txtPantalla.setText(txtPantalla.getText() + digito);
         }
     }
 
