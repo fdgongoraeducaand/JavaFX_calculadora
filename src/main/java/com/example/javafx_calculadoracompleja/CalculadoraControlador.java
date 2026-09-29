@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 
 public class CalculadoraControlador {
     // Inyección reflexiva del control anotado con @FXML
@@ -19,6 +20,8 @@ public class CalculadoraControlador {
     private Button porcentaje;
     @FXML
     private Button btnLimpiar;
+    @FXML
+    private GridPane gpPrincipal;
 
     /**
      * Invocado automáticamente por FXMLLoader tras completar la inyección.
@@ -35,6 +38,24 @@ public class CalculadoraControlador {
             operadorActual = "";
             inicioNuevoNumero = true;
         });
+
+        gpPrincipal.addEventFilter(ActionEvent.ACTION, event -> {
+            // Al ser un ActionEvent generado por el control, event.getTarget()
+            // ¡SIEMPRE es el Button!, independientemente del nodo Text interno.
+            if (event.getTarget() instanceof Button) {
+                Button boton = (Button) event.getTarget();
+                String texto = boton.getText();
+
+                if (!(texto.equals("+") || texto.equals("-")
+                        || texto.equals("*") || texto.equals("/")
+                        || texto.equals("%") || texto.equals(".")
+                        || texto.equals("="))) {
+                    txtPantalla.setText(txtPantalla.getText().equals("0") ? texto : txtPantalla.getText() + texto);
+                }
+                event.consume(); // Cancela la propagación posterior si fuera necesario
+            }
+        });
+
     }
 
     @FXML
@@ -150,8 +171,6 @@ public class CalculadoraControlador {
         }
     }
 
-
-
     private void mostrarAlertaError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Advertencia");
@@ -159,4 +178,5 @@ public class CalculadoraControlador {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
 }
